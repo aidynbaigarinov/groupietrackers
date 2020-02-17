@@ -8,6 +8,9 @@ import (
 	"net/http"
 )
 
+type ArtistsIndex struct {
+}
+
 type Artists struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
@@ -21,6 +24,10 @@ type Artists struct {
 }
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func artistsHandle(w http.ResponseWriter, r *http.Request) {
 	urlArtists := "https://groupietrackers.herokuapp.com/api/artists"
 	// urlLocations := "https://groupietrackers.herokuapp.com/api/locations"
 	// urlDates := "https://groupietrackers.herokuapp.com/api/dates"
@@ -37,16 +44,18 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(readErr)
 	}
 
-	artists1 := Artists{}
-	json.Unmarshal(body, &artists1)
+	var artists []Artists
+	json.Unmarshal(body, &artists)
 
-	t, err := template.ParseFiles("index.html")
-	t.Execute(w, artists1)
+	// fmt.Println(artists[2])
+
+	t, err := template.ParseFiles("static/index.html")
+	t.Execute(w, artists)
 }
 
 func main() {
 	log.Println("starting localhost:8080...")
-	fs := http.FileServer(http.Dir("static"))
-	http.Handle("/", fs)
+	http.HandleFunc("/", rootHandle)
+	http.HandleFunc("/artists", artistsHandle)
 	http.ListenAndServe(":8080", nil)
 }
