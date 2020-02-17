@@ -2,16 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-type ArtistsIndex struct {
-}
-
-type Artists struct {
+type Artists []struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -24,10 +22,6 @@ type Artists struct {
 }
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func artistsHandle(w http.ResponseWriter, r *http.Request) {
 	urlArtists := "https://groupietrackers.herokuapp.com/api/artists"
 	// urlLocations := "https://groupietrackers.herokuapp.com/api/locations"
 	// urlDates := "https://groupietrackers.herokuapp.com/api/dates"
@@ -38,24 +32,27 @@ func artistsHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatal((err))
 	}
 
-	body, readErr := ioutil.ReadAll(req.Body)
+	body, errRead := ioutil.ReadAll(req.Body)
 	defer req.Body.Close()
-	if readErr != nil {
-		log.Fatal(readErr)
+	if errRead != nil {
+		log.Fatal(errRead)
 	}
 
-	var artists []Artists
-	json.Unmarshal(body, &artists)
+	var artistsList Artists
+	json.Unmarshal(body, &artistsList)
 
-	// fmt.Println(artists[2])
+	// fmt.Println(artistsList)
 
-	t, err := template.ParseFiles("static/index.html")
-	t.Execute(w, artists)
+	t, errParse := template.ParseFiles("templates/index.html")
+	if errParse != nil {
+		fmt.Println("errParse")
+		log.Fatal((err))
+	}
+	t.Execute(w, artistsList)
 }
 
 func main() {
 	log.Println("starting localhost:8080...")
 	http.HandleFunc("/", rootHandle)
-	http.HandleFunc("/artists", artistsHandle)
 	http.ListenAndServe(":8080", nil)
 }
