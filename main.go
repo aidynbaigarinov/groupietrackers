@@ -21,35 +21,43 @@ type Artists []struct {
 	Relations    string   `json:"relations"`
 }
 
-var ArtistsList Artists
+type URLs struct {
+	Url string
+}
 
-func rootHandle(w http.ResponseWriter, r *http.Request) {
-	urlArtists := "https://groupietrackers.herokuapp.com/api/artists"
-	// urlLocations := "https://groupietrackers.herokuapp.com/api/locations"
-	// urlDates := "https://groupietrackers.herokuapp.com/api/dates"
-	// urlRelation := "https://groupietrackers.herokuapp.com/api/relation"
+func (u *URLs) GetJSON(url string) []byte {
 
-	req, err := http.Get(urlArtists)
+	r, err := http.Get(url)
 	if err != nil {
 		log.Fatal((err))
 	}
 
-	body, errRead := ioutil.ReadAll(req.Body)
-	defer req.Body.Close()
+	body, errRead := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
 	if errRead != nil {
 		log.Fatal(errRead)
 	}
+	return body
+}
 
-	json.Unmarshal(body, &ArtistsList)
-
+func rootHandle(w http.ResponseWriter, r *http.Request) {
+	// u := URLs{}
+	var u = &URLs{Url: "https://groupietrackers.herokuapp.com/api/artists"}
+	// "https://groupietrackers.herokuapp.com/api/artists",
+	// "https://groupietrackers.herokuapp.com/api/locations",
+	// "https://groupietrackers.herokuapp.com/api/dates",
+	// "https://groupietrackers.herokuapp.com/api/relation",
 	// fmt.Println(artistsList)
+
+	var artistsList Artists
+	json.Unmarshal(u.GetJSON(u.Url), &artistsList)
 
 	t, errParse := template.ParseFiles("assets/templates/index.html")
 	if errParse != nil {
 		fmt.Println("errParse")
-		log.Fatal((err))
+		log.Fatal((errParse))
 	}
-	t.Execute(w, ArtistsList)
+	t.Execute(w, artistsList)
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
