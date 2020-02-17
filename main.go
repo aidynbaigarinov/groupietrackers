@@ -2,18 +2,18 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-type artists struct {
+type Artists struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
 	Members      []string `json:"members"`
-	CreationDate string   `json:"creationDate"`
+	CreationDate int      `json:"creationDate"`
 	FirstAlbum   string   `json:"firstAlbum"`
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
@@ -31,19 +31,22 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatal((err))
 	}
 
-	body, readErr := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
+	body, readErr := ioutil.ReadAll(req.Body)
+	defer req.Body.Close()
 	if readErr != nil {
 		log.Fatal(readErr)
 	}
 
-	artists1 := artists{}
-
+	artists1 := Artists{}
 	json.Unmarshal(body, &artists1)
 
-	fmt.Println(artists1)
+	t, err := template.ParseFiles("index.html")
+	t.Execute(w, artists1)
 }
 
 func main() {
-	// http.HandleFunc("/", rootHandle)
+	log.Println("starting localhost:8080...")
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/", fs)
+	http.ListenAndServe(":8080", nil)
 }
