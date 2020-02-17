@@ -21,6 +21,8 @@ type Artists []struct {
 	Relations    string   `json:"relations"`
 }
 
+var ArtistsList Artists
+
 func rootHandle(w http.ResponseWriter, r *http.Request) {
 	urlArtists := "https://groupietrackers.herokuapp.com/api/artists"
 	// urlLocations := "https://groupietrackers.herokuapp.com/api/locations"
@@ -38,21 +40,30 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(errRead)
 	}
 
-	var artistsList Artists
-	json.Unmarshal(body, &artistsList)
+	json.Unmarshal(body, &ArtistsList)
 
 	// fmt.Println(artistsList)
 
-	t, errParse := template.ParseFiles("templates/index.html")
+	t, errParse := template.ParseFiles("assets/templates/index.html")
 	if errParse != nil {
 		fmt.Println("errParse")
 		log.Fatal((err))
 	}
-	t.Execute(w, artistsList)
+	t.Execute(w, ArtistsList)
+}
+
+func artistHandle(w http.ResponseWriter, r *http.Request) {
+	t, errParse := template.ParseFiles("assets/templates/artist.html")
+	if errParse != nil {
+		log.Fatal(errParse)
+	}
+	t.Execute(w, nil)
 }
 
 func main() {
 	log.Println("starting localhost:8080...")
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", rootHandle)
+	// http.HandleFunc("/", artistHandle)
 	http.ListenAndServe(":8080", nil)
 }
