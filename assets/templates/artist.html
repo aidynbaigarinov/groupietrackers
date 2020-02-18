@@ -6,15 +6,30 @@
     <title>{{.Name}} | Groupie Tracker</title>
 </head>
 <body>
+    <header>
+        <a href="http://localhost:8080">Go to Main Page</a>
+    </header>
 
     <article>
 
         <section>
             <h3>{{.Name}}</h3>
             <img src="{{.Image}}" alt="artist image" width="240">
-            <p>Members: {{.Members}}</p>
+            <ul>Members:
+                {{range .Members}}
+                <li>{{.}}</li>
+                {{end}}
+            </ul>
             <p>Creation Date: {{.CreationDate}} year</p>
             <p>First Album: {{.FirstAlbum}}</p>
+
+            <!-- {{range .}} -->
+            <!-- {{range .RelationsData}} -->
+            {{range .DatesLocation}}
+            <p>{{ . }}</p>
+            {{end}}
+            <!-- {{end}} -->
+            <!-- {{end}} -->
         </section>
 
     </article>
