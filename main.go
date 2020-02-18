@@ -100,11 +100,12 @@ func getAPI(url string) []byte {
 func main() {
 	log.Println("starting localhost:8080...")
 
-	http.HandleFunc("/artist", artistHandle)
-	a := getAPI("https://groupietrackers.herokuapp.com/api")
+	url := "https://groupietrackers.herokuapp.com/api"
+	a := getAPI(url)
 	json.Unmarshal(a, &all)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", rootHandle)
+	http.HandleFunc("/artist", artistHandle)
 	http.ListenAndServe(":8080", nil)
 }

@@ -23,13 +23,10 @@
             <p>Creation Date: {{.CreationDate}} year</p>
             <p>First Album: {{.FirstAlbum}}</p>
 
-            <!-- {{range .}} -->
-            <!-- {{range .RelationsData}} -->
-            {{range .DatesLocation}}
-            <p>{{ . }}</p>
+            {{range $city, $date := .RelationsData.DatesLocation}}
+                <p>{{ $city }}</p>
+                <p>{{ $date }}</p>
             {{end}}
-            <!-- {{end}} -->
-            <!-- {{end}} -->
         </section>
 
     </article>
