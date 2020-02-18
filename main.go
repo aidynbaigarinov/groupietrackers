@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strconv"
 	"text/template"
 )
 
@@ -50,24 +49,30 @@ type RelationJSON struct {
 }
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
-	b := getAPI(all.Artists)
-	json.Unmarshal(b, &artists)
+	if r.URL.Path != "/" {
+		t, errParse := template.ParseFiles("assets/templates/error/404.html")
+		if errParse != nil {
+			log.Fatal(errParse)
+		}
+		t.Execute(w, nil)
+	} else {
+		b := getAPI(all.Artists)
+		json.Unmarshal(b, &artists)
 
-	t, errParse := template.ParseFiles("assets/templates/index.html")
-	if errParse != nil {
-		log.Fatal((errParse))
+		t, errParse := template.ParseFiles("assets/templates/index.html")
+		if errParse != nil {
+			log.Fatal((errParse))
+		}
+		t.Execute(w, &artists)
 	}
-	t.Execute(w, &artists)
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.FormValue("artist"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	name := r.FormValue("artist")
+	found := false
 
-	for index, v := range artists {
-		if index == id-1 {
+	for _, v := range artists {
+		if v.Name == name {
 			a := getAPI(v.Relations)
 			var rel RelationJSON
 			json.Unmarshal(a, &rel)
@@ -77,11 +82,17 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 				log.Fatal(errParse)
 			}
 			t.Execute(w, v)
-		} else {
-			// TODO: Handle 404
+			found = true
 		}
 	}
-
+	if !found {
+		t, errParse := template.ParseFiles("assets/templates/error/404.html")
+		if errParse != nil {
+			log.Fatal(errParse)
+		}
+		t.Execute(w, nil)
+	}
+	// TODO: handle 404
 }
 
 func getAPI(url string) []byte {
