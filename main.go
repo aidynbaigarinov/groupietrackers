@@ -3,13 +3,22 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"text/template"
 )
 
-type Artists []struct {
+type APIurls struct {
+	Artists   string `json:"artists"`
+	Locations string `json:"locations"`
+	Dates     string `json:"dates"`
+	Relation  string `json:"relation"`
+}
+
+var all *APIurls
+
+type ArtistsJSON []struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -21,43 +30,39 @@ type Artists []struct {
 	Relations    string   `json:"relations"`
 }
 
-type URLs struct {
-	Url string
+type LocationsJSON struct {
+	Index []struct {
+		ID        int      `json:"id"`
+		Locations []string `json:"locations"`
+		Dates     string   `json:"dates"`
+	} `json:"index"`
 }
 
-func (u *URLs) GetJSON(url string) []byte {
+type DatesJSON struct {
+	Index []struct {
+		ID    int      `json:"id"`
+		Dates []string `json:"dates"`
+	} `json:"index"`
+}
 
-	r, err := http.Get(url)
-	if err != nil {
-		log.Fatal((err))
-	}
-
-	body, errRead := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
-	if errRead != nil {
-		log.Fatal(errRead)
-	}
-	return body
+type RelationJSON struct {
+	Index []struct {
+		ID            int                 `json:"id"`
+		DatesLocation map[string][]string `json:"datesLocations"`
+	} `json:"index"`
 }
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
-	// u := URLs{}
-	var u = &URLs{Url: "https://groupietrackers.herokuapp.com/api/artists"}
-	// "https://groupietrackers.herokuapp.com/api/artists",
-	// "https://groupietrackers.herokuapp.com/api/locations",
-	// "https://groupietrackers.herokuapp.com/api/dates",
-	// "https://groupietrackers.herokuapp.com/api/relation",
-	// fmt.Println(artistsList)
-
-	var artistsList Artists
-	json.Unmarshal(u.GetJSON(u.Url), &artistsList)
+	b := getAPI(all.Artists)
+	var artists *ArtistsJSON
+	json.Unmarshal(b, &artists)
 
 	t, errParse := template.ParseFiles("assets/templates/index.html")
 	if errParse != nil {
 		fmt.Println("errParse")
 		log.Fatal((errParse))
 	}
-	t.Execute(w, artistsList)
+	t.Execute(w, &artists)
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
@@ -68,10 +73,31 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
+func getAPI(url string) []byte {
+	r, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	body, errRead := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if errRead != nil {
+		log.Fatal(errRead)
+	}
+	return body
+}
+
 func main() {
 	log.Println("starting localhost:8080...")
+
+	http.HandleFunc("/artist", artistHandle)
+	a := getAPI("https://groupietrackers.herokuapp.com/api")
+	json.Unmarshal(a, &all)
+
+	c := getAPI(all.Relation)
+	var relation *RelationJSON
+	json.Unmarshal(c, &relation)
+
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", rootHandle)
-	// http.HandleFunc("/", artistHandle)
 	http.ListenAndServe(":8080", nil)
 }

@@ -12,17 +12,18 @@
 
         <article class="card-table">
 
-            {{range .}}
-
-            <div class="card">
-                <a href="http://localhost:8080/{{.ID}}">
-                    <img src="{{.Image}}" alt="{{.Name}} image" width="240" height="240">
-                    <div class="flip-card"></div>
-                </a>
-            </div>
-
-            {{end}}
-
+            
+                <form action="/artist" name="artist-list" method="GET">
+                    
+                    <input type="submit" value="Go to">
+                    <select name="artist">
+                        {{range .}}
+                        <option value="{{.Name}}">{{.Name}}</option>
+                        {{end}}
+                    </select>
+                    
+                </form>
+            
         </article>
 
     </section>
