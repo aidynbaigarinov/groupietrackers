@@ -49,21 +49,18 @@ type RelationJSON struct {
 }
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		t, errParse := template.ParseFiles("assets/templates/error/404.html")
-		if errParse != nil {
-			log.Fatal(errParse)
-		}
-		t.Execute(w, nil)
-	} else {
-		b := getAPI(all.Artists)
-		json.Unmarshal(b, &artists)
 
-		t, errParse := template.ParseFiles("assets/templates/index.html")
-		if errParse != nil {
-			log.Fatal((errParse))
+	if r.URL.Path != "/" {
+		notFound(w)
+	} else {
+		url := "https://groupietrackers.herokuapp.com/api"
+		a, err := getAPI(url)
+		if err != nil {
+			internalServerError(w)
+		} else {
+			json.Unmarshal(a, &all)
+			parseIndex(w)
 		}
-		t.Execute(w, &artists)
 	}
 }
 
@@ -73,47 +70,81 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 
 	for _, v := range artists {
 		if v.Name == name {
-			a := getAPI(v.Relations)
-			var rel RelationJSON
-			json.Unmarshal(a, &rel)
-			v.RelationsData = rel
-			t, errParse := template.ParseFiles("assets/templates/artist.html")
-			if errParse != nil {
-				log.Fatal(errParse)
-			}
-			t.Execute(w, v)
+			parseArtist(w, &v)
 			found = true
 		}
 	}
 	if !found {
-		t, errParse := template.ParseFiles("assets/templates/error/404.html")
-		if errParse != nil {
-			log.Fatal(errParse)
-		}
-		t.Execute(w, nil)
+		notFound(w)
 	}
-	// TODO: handle 404
 }
 
-func getAPI(url string) []byte {
+func parseIndex(w http.ResponseWriter) {
+	b, err := getAPI(all.Artists)
+	if err != nil {
+		internalServerError(w)
+	} else {
+		json.Unmarshal(b, &artists)
+
+		t, errParse := template.ParseFiles("assets/templates/index.html")
+		if errParse != nil {
+			internalServerError(w)
+		} else {
+			t.Execute(w, &artists)
+		}
+	}
+}
+
+func parseArtist(w http.ResponseWriter, v *ArtistsJSON) {
+	a, err := getAPI(v.Relations)
+	if err != nil {
+		internalServerError(w)
+	} else {
+		var rel RelationJSON
+		json.Unmarshal(a, &rel)
+		v.RelationsData = rel
+		t, errParse := template.ParseFiles("assets/templates/artist.html")
+		if errParse != nil {
+			internalServerError(w)
+		} else {
+			t.Execute(w, v)
+		}
+	}
+}
+
+func notFound(w http.ResponseWriter) {
+	t, errParse := template.ParseFiles("assets/templates/error/404.html")
+	if errParse != nil {
+		internalServerError(w)
+	} else {
+		t.Execute(w, nil)
+	}
+}
+
+func internalServerError(w http.ResponseWriter) {
+	t, errParse := template.ParseFiles("assets/templates/error/500.html")
+	if errParse != nil {
+		log.Fatal(errParse)
+	} else {
+		t.Execute(w, nil)
+	}
+}
+
+func getAPI(url string) ([]byte, error) {
 	r, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	body, errRead := ioutil.ReadAll(r.Body)
 	defer r.Body.Close()
 	if errRead != nil {
-		log.Fatal(errRead)
+		return nil, err
 	}
-	return body
+	return body, nil
 }
 
 func main() {
 	log.Println("starting localhost:8080...")
-
-	url := "https://groupietrackers.herokuapp.com/api"
-	a := getAPI(url)
-	json.Unmarshal(a, &all)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", rootHandle)

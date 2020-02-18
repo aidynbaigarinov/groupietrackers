@@ -21,7 +21,11 @@
                             <option value="{{.Name}}">{{.Name}}</option>
                         {{end}}
                     </select>
-                    
+                    {{range .}}
+                    <a href="http://localhost:8080/artist?artist={{.Name}}">
+                        <img src="{{.Image}}" alt="{{.Name}}" width="200" height="200">
+                    </a>
+                    {{end}}
                 </form>
             
         </article>
