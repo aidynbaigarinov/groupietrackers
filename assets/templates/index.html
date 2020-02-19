@@ -4,31 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Groupie Trackers | Artists</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 <body>
-
-    <section>
+    <header class="header" id="top-header">
+        <h1 >Groupie Trackers</h1>
+    </header>
+    
+    <section class="main">
         <article class="card-table">
-
+            
             <form class="form" action="/artist" name="artist-list" method="GET">
-                    
-                <input class="search-bar" type="text" name="artist" placeholder="type artist's name">
-                <input class="btn" type="submit" value="Go to">
-                <select class="artists-list" name="artist">
-                    {{range .}}
+                
+                <article class="search">
+                    <input class="search-bar" type="text" name="artist-search" placeholder="type artist's name">
+                    <select class="artists-list" name="artist-list">
+                        <option disabled selected value> -- select an option -- </option>
+                        {{range .}}
                         <option value="{{.Name}}">{{.Name}}</option>
-                    {{end}}
-                </select>
+                        {{end}}
+                    </select>
+                    <input class="btn" type="submit" value="Go to">
+                </article>
                 {{range .}}
-                    <a class="img-link" href="http://localhost:8080/artist?artist={{.Name}}">
-                        <img class="artists-image" src="// NAME //" alt="{{.Name}}" width="200" height="200">
+                <a class="card" href="http://localhost:8080/artist?artist-search={{.Name}}">
+                        <img class="artists-image" src="{{.Image}}" width="200" height="200" alt="{{.Name}}" >
                     </a>
-                {{end}}
-            </form>
+                    {{end}}
+                </form>
+                
+            </article>
+        </section>
         
-        </article>
-    </section>
+        <footer class="footer">
+            <p class="github-link">Made by <a href="https://github.com/aidynbaigarinov">Aidyn</a></p>
+            <article class="quote">
+                <p class="quote-p">"One good thing about music, when it hits you, you feel no pain."</p>
+                <h3>Bob Marley</h3>
+            </article>
+    </footer>
 
+    <script>
+        window.onscroll = function() {scrollFunc()};
+
+        var header = document.getElementById("top-header");
+        var sticky = header.offsetTop;
+
+        function scrollFunc() {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
 </body>
 </html>

@@ -2,10 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"text/template"
+	"time"
 )
 
 type APIurls struct {
@@ -66,9 +69,23 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("artist")
+	search := r.FormValue("artist-search")
+	list := r.FormValue("artist-list")
 	found := false
-
+	name := ""
+	fmt.Println(search)
+	fmt.Println(list)
+	if search == "" && list == "" {
+		rand.Seed(time.Now().UnixNano())
+		min := 2
+		max := 53
+		tmp := rand.Intn(max-min+1) + min
+		name = artists[tmp-1].Name
+	} else if search == "" && list != "" {
+		name = list
+	} else {
+		name = search
+	}
 	for _, v := range artists {
 		if v.Name == name {
 			parseArtist(w, &v)
@@ -78,6 +95,7 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 	if !found {
 		errorHandler(w, http.StatusNotFound)
 	}
+
 }
 
 func parseIndex(w http.ResponseWriter) {

@@ -1,15 +1,90 @@
-@import url('https://fonts.googleapis.com/css?family=Quicksand:400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Comfortaa:400,700|Fredoka+One|Indie+Flower&display=swap');
+
+
+/*
+font-family: 'Fredoka One', cursive;
+
+font-family: 'Comfortaa', cursive;
+
+font-family: 'Indie Flower', cursive;
+*/
+
 
 * {
     font-family: 'Quicksand', sans-serif;
     box-sizing: border-box;
+    font-size: 24px;
+}
+
+/* HEADER */
+
+.header {
+    background-color: rgb(155, 155, 155);
+    height: 130px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 80px;
+    font-family: 'Fredoka One', cursive;
+    padding-top: 25px;
+}
+
+.header p {
+    font-size: 20px;
+    margin: 22px;
+}
+
+.header h3 {
+    padding-left: 560px;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.sticky + .main {
+    padding-top: 102px;
+}
+
+/* MAIN */
+
+.main {
+    width: 1203px;
+    margin: 0 auto;
+    background-color: rgb(148, 148, 148);
+    padding: 16px;
+}
+
+.search {
+    text-align: center;
+}
+
+.search-bar {
+    margin: 10px 20px;
+    width: 500px;
+    height: 50px;
+}
+
+.artists-list {
+    margin: 0 20px;
+    width: 250px;
+    height: 50px;
+}
+
+.btn {
+    margin: 0 20px;
+    width: 160px;
+    height: 50px;
 }
 
 .card {
     display: inline-block;
-    width: 246px;
-    height: 246px;
-    border: 3px solid black;
+    background-color: rgb(58, 58, 58);
+    width: 210px;
+    height: 330px;
     margin: 10px;
     text-align: center;
     transition: opacity 0.15s ease-in;
@@ -19,13 +94,45 @@
     border-radius: 10px;
 }
 
-.card:hover {
+/* .card:hover {
     opacity: .5;
-}
+} */
 
 .card-table {
     /* text-align: center; */
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
+}
+
+/* FOOTER */
+
+.footer {
+    background-color: rgb(155, 155, 155);
+    height: 130px;
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
+    display: flex;
+    justify-content: space-between;
+}
+
+.github-link {
+    padding: 60px 0 0 44px;
+    font-size: 20px;
+}
+
+.quote {
+    font-size: 20px;
+    padding: 37px 30px 0 0;
+}
+
+.quote-p {
+    
+    font-size: 22px;
+}
+
+.footer h3 {
+    /* padding-left: 1300px; */
+    padding: 10px 0px 0 415px;
+    font-size: 30px;
 }
