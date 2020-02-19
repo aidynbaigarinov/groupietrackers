@@ -25,7 +25,9 @@
 
             {{range $city, $date := .RelationsData.DatesLocation}}
                 <p>{{ $city }}</p>
-                <p>{{ $date }}</p>
+                {{range $date}}
+                <p>{{ . }}</p>
+                {{end}}
             {{end}}
         </section>
 
