@@ -69,22 +69,15 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
-	search := r.FormValue("artist-search")
-	list := r.FormValue("artist-list")
+	name := r.FormValue("artist")
 	found := false
-	name := ""
-	fmt.Println(search)
-	fmt.Println(list)
-	if search == "" && list == "" {
+	fmt.Println(name)
+	if name == "" {
 		rand.Seed(time.Now().UnixNano())
 		min := 2
 		max := 53
 		tmp := rand.Intn(max-min+1) + min
 		name = artists[tmp-1].Name
-	} else if search == "" && list != "" {
-		name = list
-	} else {
-		name = search
 	}
 	for _, v := range artists {
 		if v.Name == name {

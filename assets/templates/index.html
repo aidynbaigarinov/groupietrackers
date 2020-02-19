@@ -15,22 +15,29 @@
     <section class="main">
         <article class="card-table">
             
-            <form class="form" action="/artist" name="artist-list" method="GET">
+            <form class="form" name="submitForm" action="/artist" method="POST">
                 
                 <article class="search">
-                    <input class="search-bar" type="text" name="artist-search" placeholder="type artist's name">
-                    <select class="artists-list" name="artist-list">
-                        <option disabled selected value> -- select an option -- </option>
+
+                    <select class="artists-list" name="artist">
+                        <option disabled selected value>select artist</option>
                         {{range .}}
                         <option value="{{.Name}}">{{.Name}}</option>
                         {{end}}
                     </select>
                     <input class="btn" type="submit" value="Go to">
+
                 </article>
                 {{range .}}
-                <a class="card" href="http://localhost:8080/artist?artist-search={{.Name}}">
+                    <!-- <a class="card" href="http://localhost:8080/artist?artist={{.Name}}">
                         <img class="artists-image" src="{{.Image}}" width="200" height="200" alt="{{.Name}}" >
-                    </a>
+                    </a> -->
+
+                    <button class="card" name="artist" type="submit" value="{{.Name}}">
+                        <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
+                    </button>
+                    
+                    <!-- <input class="card" name="artist" type="submit" value="{{.Name}}"> -->
                     {{end}}
                 </form>
                 
@@ -58,6 +65,13 @@
                 header.classList.remove("sticky");
             }
         }
+
+        window.onload=function() {
+            document.getElementById("employeeLink").onclick=function() {
+            document.getElementById("myForm").submit();
+            return false; // cancel the actual link
+            }
+ }
     </script>
 </body>
 </html>
