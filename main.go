@@ -51,12 +51,13 @@ type RelationJSON struct {
 func rootHandle(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path != "/" {
-		notFound(w)
+		errorHandler(w, http.StatusNotFound)
+		// notFound(w)
 	} else {
 		url := "https://groupietrackers.herokuapp.com/api"
 		a, err := getAPI(url)
 		if err != nil {
-			internalServerError(w)
+			errorHandler(w, http.StatusInternalServerError)
 		} else {
 			json.Unmarshal(a, &all)
 			parseIndex(w)
@@ -75,20 +76,20 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !found {
-		notFound(w)
+		errorHandler(w, http.StatusNotFound)
 	}
 }
 
 func parseIndex(w http.ResponseWriter) {
 	b, err := getAPI(all.Artists)
 	if err != nil {
-		internalServerError(w)
+		errorHandler(w, http.StatusInternalServerError)
 	} else {
 		json.Unmarshal(b, &artists)
 
 		t, errParse := template.ParseFiles("assets/templates/index.html")
 		if errParse != nil {
-			internalServerError(w)
+			errorHandler(w, http.StatusInternalServerError)
 		} else {
 			t.Execute(w, &artists)
 		}
@@ -98,24 +99,33 @@ func parseIndex(w http.ResponseWriter) {
 func parseArtist(w http.ResponseWriter, v *ArtistsJSON) {
 	a, err := getAPI(v.Relations)
 	if err != nil {
-		internalServerError(w)
+		errorHandler(w, http.StatusInternalServerError)
 	} else {
 		var rel RelationJSON
 		json.Unmarshal(a, &rel)
 		v.RelationsData = rel
 		t, errParse := template.ParseFiles("assets/templates/artist.html")
 		if errParse != nil {
-			internalServerError(w)
+			errorHandler(w, http.StatusInternalServerError)
 		} else {
 			t.Execute(w, v)
 		}
 	}
 }
 
+func badRequest(w http.ResponseWriter) {
+	t, errParse := template.ParseFiles("assets/templates/error/400.html")
+	if errParse != nil {
+		errorHandler(w, http.StatusInternalServerError)
+	} else {
+		t.Execute(w, nil)
+	}
+}
+
 func notFound(w http.ResponseWriter) {
 	t, errParse := template.ParseFiles("assets/templates/error/404.html")
 	if errParse != nil {
-		internalServerError(w)
+		errorHandler(w, http.StatusInternalServerError)
 	} else {
 		t.Execute(w, nil)
 	}
@@ -127,6 +137,30 @@ func internalServerError(w http.ResponseWriter) {
 		log.Fatal(errParse)
 	} else {
 		t.Execute(w, nil)
+	}
+}
+
+func checkUrl(url string) bool {
+	for i, n := 0, len(url); i < n; i++ {
+		if i != len(url)-1 && url[i] == '%' {
+			if url[i+1] == '%' {
+				return false
+			} else if url[i] == '{' {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func errorHandler(w http.ResponseWriter, status int) {
+	w.WriteHeader(status)
+	if status == http.StatusBadRequest {
+		badRequest(w)
+	} else if status == http.StatusNotFound {
+		notFound(w)
+	} else if status == http.StatusInternalServerError {
+		internalServerError(w)
 	}
 }
 

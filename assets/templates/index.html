@@ -9,27 +9,25 @@
 <body>
 
     <section>
-
         <article class="card-table">
 
-            
-                <form action="/artist" name="artist-list" method="GET">
+            <form class="form" action="/artist" name="artist-list" method="GET">
                     
-                    <input type="submit" value="Go to">
-                    <select name="artist">
-                        {{range .}}
-                            <option value="{{.Name}}">{{.Name}}</option>
-                        {{end}}
-                    </select>
+                <input class="search-bar" type="text" name="artist" placeholder="type artist's name">
+                <input class="btn" type="submit" value="Go to">
+                <select class="artists-list" name="artist">
                     {{range .}}
-                    <a href="http://localhost:8080/artist?artist={{.Name}}">
-                        <img src="{{.Image}}" alt="{{.Name}}" width="200" height="200">
-                    </a>
+                        <option value="{{.Name}}">{{.Name}}</option>
                     {{end}}
-                </form>
-            
+                </select>
+                {{range .}}
+                    <a class="img-link" href="http://localhost:8080/artist?artist={{.Name}}">
+                        <img class="artists-image" src="// NAME //" alt="{{.Name}}" width="200" height="200">
+                    </a>
+                {{end}}
+            </form>
+        
         </article>
-
     </section>
 
 </body>
