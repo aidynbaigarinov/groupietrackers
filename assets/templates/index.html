@@ -29,27 +29,24 @@
 
                 </article>
                 {{range .}}
-                    <!-- <a class="card" href="http://localhost:8080/artist?artist={{.Name}}">
-                        <img class="artists-image" src="{{.Image}}" width="200" height="200" alt="{{.Name}}" >
-                    </a> -->
 
-                    <button class="card" name="artist" type="submit" value="{{.Name}}">
-                        <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
-                    </button>
-                    
-                    <!-- <input class="card" name="artist" type="submit" value="{{.Name}}"> -->
-                    {{end}}
-                </form>
+                <button class="card" name="artist" type="submit" value="{{.Name}}">
+                    <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
+                    <h3 class="btn-artist">{{.Name}}</h3>
+                </button>
+
+                {{end}}
+            </form>
                 
-            </article>
-        </section>
+        </article>
+    </section>
         
-        <footer class="footer">
-            <p class="github-link">Made by <a href="https://github.com/aidynbaigarinov">Aidyn</a></p>
-            <article class="quote">
-                <p class="quote-p">"One good thing about music, when it hits you, you feel no pain."</p>
-                <h3>Bob Marley</h3>
-            </article>
+    <footer class="footer">
+        <p class="github-link">Made by <a href="https://github.com/aidynbaigarinov">Aidyn</a></p>
+        <article class="quote">
+            <p class="quote-p">"One good thing about music, when it hits you, you feel no pain."</p>
+            <h3>Bob Marley</h3>
+        </article>
     </footer>
 
     <script>
@@ -66,12 +63,6 @@
             }
         }
 
-        window.onload=function() {
-            document.getElementById("employeeLink").onclick=function() {
-            document.getElementById("myForm").submit();
-            return false; // cancel the actual link
-            }
- }
     </script>
 </body>
 </html>

@@ -52,7 +52,7 @@ h1 {
 /* MAIN */
 
 .main {
-    width: 1203px;
+    width: 1168px;
     margin: 0 auto;
     background-color: rgb(148, 148, 148);
     padding: 16px;
@@ -60,18 +60,7 @@ h1 {
 
 .search {
     text-align: center;
-}
-
-.search-bar {
-    margin: 10px 20px;
-    width: 500px;
-    height: 50px;
-}
-
-.artists-list {
-    margin: 0 20px;
-    width: 250px;
-    height: 50px;
+    padding: 30px 40px;
 }
 
 .btn {
@@ -81,15 +70,19 @@ h1 {
 }
 
 .card {
-    display: inline-block;
+    display: inline-grid;
     padding: 0;
     border: none;
     background-color: rgb(58, 58, 58);
     width: 210px;
     height: 330px;
-    margin: 10px;
-    text-align: center;
+    margin: 10px 30px;
+    /* text-align: center; */
     transition: background-color 0.15s ease-in;
+}
+
+.card img {
+    margin: 0 auto;
 }
 
 .card:hover {
@@ -101,15 +94,17 @@ h1 {
     border-radius: 10px;
 }
 
-/* .card:hover {
-    opacity: .5;
-} */
-
 .card-table {
     /* text-align: center; */
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
+}
+
+.btn-artist {
+    color: antiquewhite;
+    font-size: 30px;
+    font-family: 'Indie Flower', cursive;
 }
 
 /* FOOTER */
