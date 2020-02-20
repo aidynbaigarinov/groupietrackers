@@ -1,0 +1,204 @@
+:root {
+    --mainColor: #ff9800;
+}
+
+* {
+    font-family: 'Playfair Display', serif;
+    box-sizing: border-box;
+    font-size: 24px;
+}
+
+body {
+    background: url(/assets/img/bg-vinyl.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: antiquewhite;
+}
+
+/* HEADER */
+
+header {
+    width: 100%;
+    height: 100px;
+    background: url(/assets/img/bg-header.jpg) no-repeat center center fixed;
+    background-size: cover;
+    text-align: left;
+    padding: 20px 0 0 40px;
+    margin: 0 0 100px 0;
+}
+
+header a {
+    text-decoration: none;
+    font-size: 50px;
+    color: #F2B705;
+    background:
+     linear-gradient(
+       to bottom, var(--mainColor) 0%,
+       var(--mainColor) 100%
+     );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
+    transition: all .5s ease;
+}
+
+header a:hover {
+    text-decoration: none;
+    color: #0D0D0D;
+    background-size: 4px 50px;
+}
+
+/* MAIN */
+
+.main {
+    width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.section-img img {
+    margin: 0 20px;
+    border-radius: 25px;
+}
+
+.bg-img {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    background-color:
+    #F2B705;
+    margin: 0px 0 0 30px;
+    top: 211px;
+    z-index: -1;
+    border-radius: 25px;
+}
+
+.section-info {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 65px;
+    color: #F2B705;
+    text-align: right;
+    margin: 0 auto 25px auto;
+    border-bottom: 2px solid #F2B705;
+}
+
+.data {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.div-members,
+.div-create-album,
+.concert-dates {
+    padding: 10px;
+    font-size: 20px;
+}
+
+.div-members p {
+    color: #F2B705;
+    font-size: 22px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.div-members li {
+    margin-bottom: 10px;
+    color: rgb(236, 236, 236);
+}
+
+.div-create-album {
+    border-left: 2px solid #F2B705;
+}
+
+.div-create-album p{
+    margin-bottom: 10px;
+}
+
+.creation-date,
+.first-album {
+    color: #F2B705;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.city {
+    color: #F2B705;
+    font-size: 22px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.date {
+    margin-bottom: 10px;
+}
+
+.concert-dates {
+    border-left: 2px solid #F2B705;
+    display: flex;
+    flex-flow: column wrap;
+    margin-bottom: 10px;
+    height: 400px;
+}
+
+/* FOOTER */
+
+.footer {
+    background: url(/assets/img/bg-header.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: #F29F05;
+    height: 110px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.github-link {
+    padding: 60px 0 0 44px;
+    font-size: 20px;
+}
+
+.github-link a {
+    text-decoration: none;
+    color: #F29F05;
+    background:
+     linear-gradient(
+       to bottom, var(--mainColor) 0%,
+       var(--mainColor) 100%
+     );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
+    text-decoration: none;
+    transition: all .5s ease;
+}
+
+.github-link a:hover {
+    text-decoration: none;
+    color: #0D0D0D;
+    background-size: 4px 50px;
+}
+
+.quote {
+    font-size: 20px;
+    padding: 37px 30px 0 0;
+}
+
+.quote-p {
+    
+    font-size: 22px;
+}
+
+.footer h3 {
+    padding: 10px 0px 0 415px;
+    font-size: 30px;
+}

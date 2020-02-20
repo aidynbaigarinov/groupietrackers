@@ -49,7 +49,6 @@ h1 {
 
 h1:hover {
     color: rgb(255, 215, 96);
-    
 }
 
 h1::after {
@@ -97,16 +96,6 @@ h1:hover::after {
     text-align: center;
     padding: 30px 40px;
 }
-
-/* .artists-list {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("/assets/img/downwards-pointer.svg") 97% no-repeat right ;
-    border-radius: 0;
-    line-height: 2;
-    padding: 0.5em;
-} */
 
 .artists-list {
     width: 400px;

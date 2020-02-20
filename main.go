@@ -84,7 +84,7 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !found {
-		errorHandler(w, http.StatusNotFound)
+		errorHandler(w, http.StatusBadRequest)
 	}
 
 }
