@@ -116,6 +116,7 @@ h1:hover::after {
     border-radius: 25px;
     -moz-appearance: none;
     text-align: center;
+    border: none;
 }
 
 .artists-list:hover {
