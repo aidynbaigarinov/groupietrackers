@@ -1,0 +1,53 @@
+:root {
+    --mainColor: #ff9800;
+}
+
+* {
+    font-family: 'Playfair Display', serif;
+    box-sizing: border-box;
+    font-size: 24px;
+}
+
+body {
+    background: url(/assets/img/bg-vinyl.jpg) no-repeat center center fixed;
+    background-size: cover;
+    color: antiquewhite;
+}
+
+h1 {
+    font-size: 160px;
+    text-align: center;
+    margin: 200px 0 50px 0;
+    color: #F2B705;
+}
+
+p {
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+a {
+    display: inline-block;
+    text-decoration: none;
+    position: relative;
+    left: 50%;
+    margin: -238px;
+    font-size: 50px;
+    color: #F2B705;
+    background:
+    linear-gradient(
+      to bottom, var(--mainColor) 0%,
+      var(--mainColor) 100%
+    );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
+    transition: all .5s ease;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #0D0D0D;
+    background-size: 4px 50px;
+}
