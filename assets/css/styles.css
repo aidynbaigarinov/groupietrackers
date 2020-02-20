@@ -1,18 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Comfortaa:400,700|Fredoka+One|Indie+Flower&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:500&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap');
 
 :root {
     --mainColor: #ff9800;
 }
-
-/*
-font-family: 'Fredoka One', cursive;
-
-font-family: 'Comfortaa', cursive;
-
-font-family: 'Indie Flower', cursive;
-*/
 
  @keyframes card {
     0% {
@@ -28,20 +19,21 @@ font-family: 'Indie Flower', cursive;
 
 
 * {
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Playfair Display', serif;
     box-sizing: border-box;
     font-size: 24px;
 }
 
 body {
-    background: url(/assets/img/bg-b-w.jpg) no-repeat center center fixed;
+    background: url(/assets/img/bg-vinyl.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
 /* HEADER */
 
 .header {
-    background-color: #595959;
+    background: url(/assets/img/bg-header.jpg) center fixed;
+    background-size: cover;
     height: 130px;
     text-align: center;
     z-index: 1;
@@ -72,7 +64,6 @@ h1::after {
 h1:hover::after {
     margin: 0 auto;
     width: 100%;
-    /* transition: width .3s; */
 }
 
 .header p {
@@ -107,21 +98,55 @@ h1:hover::after {
     padding: 30px 40px;
 }
 
+/* .artists-list {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("/assets/img/downwards-pointer.svg") 97% no-repeat right ;
+    border-radius: 0;
+    line-height: 2;
+    padding: 0.5em;
+} */
+
+.artists-list {
+    width: 400px;
+    height: 50px;
+    background-color: #F2B705;
+    color: rgba(0, 0, 0);
+    border-radius: 25px;
+    -moz-appearance: none;
+    text-align: center;
+}
+
+.artists-list:hover {
+    box-shadow: 0px 20px 14px 0px rgba(0,0,0);
+    background-color: rgba(0,0,0);
+    color: #F2B705;
+}
+
 .btn {
     margin: 0 20px;
     width: 160px;
-    height: 43px;
+    height: 50px;
+    border-radius: 25px;
+    border: none;
+    background-color: #F2B705;
+    color: rgba(0,0,0);
     transition: all 0.15s ease-in;
 }
 
 .btn:hover {
-    box-shadow: 0px 20px 14px 0px rgba(0,0,0,0.53);
+    box-shadow: 0px 20px 14px 0px rgba(0,0,0);
+    background-color: rgba(0,0,0);
+    color: #F2B705;
 }
+
+
 
 .card {
     display: inline-grid;
     border: none;
-    background-color: #0D0D0D;
+    background-color: rgb(49, 49, 49);
     width: 210px;
     height: 330px;
     margin: 10px 30px;
@@ -135,9 +160,6 @@ h1:hover::after {
 }
 
 .card:hover {
-    /* transform: translate(0, -15px);
-    box-shadow: 0px 20px 14px 0px rgba(0,0,0,0.53);
-    opacity: .9; */
     animation: card .3s cubic-bezier(0.470, 0.000, 0.745, 0.715) both;
 }
 
@@ -147,7 +169,6 @@ h1:hover::after {
 }
 
 .card-table {
-    /* text-align: center; */
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
@@ -156,17 +177,17 @@ h1:hover::after {
 .btn-artist {
     color: #F29F05;
     font-size: 25px;
-    font-family: 'Indie Flower', cursive;
+    border-top: 3px solid #F29F05;
 }
 
 /* FOOTER */
 
 .footer {
+    background: url(/assets/img/bg-header.jpg) no-repeat center center fixed;
+    background-size: cover;
     color: #F29F05;
-    background-color: #595959;
     height: 130px;
     text-align: center;
-    font-family: 'Abril Fatface', cursive;
     display: flex;
     justify-content: space-between;
 }
@@ -208,7 +229,6 @@ h1:hover::after {
 }
 
 .footer h3 {
-    /* padding-left: 1300px; */
     padding: 10px 0px 0 415px;
     font-size: 30px;
 }
