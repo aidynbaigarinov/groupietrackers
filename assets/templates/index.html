@@ -17,16 +17,26 @@
         <article class="card-table">
             
             <form class="form" name="submitForm" action="/artist" method="POST">
-                
+                <input list="search-bar" id="search-input" name="artist">
+                <datalist id="search-bar">
+                    {{range .}}
+                    <option value="{{.Name}}">
+                    {{range .Members}}
+                    <option value="{{.}}">
+                    {{end}}
+                    <option value="{{.CreationDate}}">
+                    <option value="{{.FirstAlbum}}">
+                    <option value="{{.RelationsData.DatesLocation}}">
+                    {{end}}
+                </datalist>
                 <article class="search">
-
-                    <select class="artists-list" name="artist">
+                    <!-- <select class="artists-list" name="artist">
                         <option disabled selected value>select artist</option>
                         {{range .}}
                         <option value="{{.Name}}">{{.Name}}</option>
                         {{end}}
-                    </select>
-                    <input class="btn" type="submit" value="Go to">
+                    </select> -->
+                    <input class="btn" type="submit" value="Go!">
 
                 </article>
                 {{range .}}

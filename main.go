@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -68,7 +69,8 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("artist")
+	name := r.FormValue("submitForm")
+	fmt.Println(name)
 	found := false
 	if name == "" {
 		rand.Seed(time.Now().UnixNano())
