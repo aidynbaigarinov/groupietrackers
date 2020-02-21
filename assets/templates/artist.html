@@ -36,7 +36,7 @@
                     <p>{{.FirstAlbum}}</p>
                 </div>
                 <div class="concert-dates">
-                    {{range $city, $date := .RelationsData.DatesLocation}}
+                    {{range $city, $date := .RelationsData.DatesLocations}}
                     <p class="city">{{ $city }}</p>
                     {{range $date}}
                     <p class="date">{{ . }}</p>

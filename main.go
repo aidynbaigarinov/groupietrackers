@@ -35,6 +35,7 @@ type ArtistsJSON struct {
 
 var artists []ArtistsJSON
 
+/*
 type LocationsJSON struct {
 	ID        int      `json:"id"`
 	Locations []string `json:"locations"`
@@ -45,11 +46,13 @@ type DatesJSON struct {
 	ID    int      `json:"id"`
 	Dates []string `json:"dates"`
 }
-
+*/
 type RelationJSON struct {
-	// ID            int                 `json:"id"`
-	DatesLocation map[string][]string `json:"datesLocations"`
+	ID             int                 `json:"id"`
+	DatesLocations map[string][]string `json:"datesLocations"`
 }
+
+var rel []RelationJSON
 
 func rootHandle(w http.ResponseWriter, r *http.Request) {
 
@@ -60,6 +63,7 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 		url := "https://groupietrackers.herokuapp.com/api"
 		a, err := getAPI(url)
 		if err != nil {
+			fmt.Println("1")
 			errorHandler(w, http.StatusInternalServerError)
 		} else {
 			json.Unmarshal(a, &all)
@@ -69,59 +73,85 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 }
 
 func artistHandle(w http.ResponseWriter, r *http.Request) {
-	name := r.FormValue("submitForm")
-	fmt.Println(name)
+	artistBtn := r.FormValue("artist-btn")
+	searchBar := r.FormValue("search-bar")
+	fmt.Println("name", artistBtn)
+	fmt.Println("searchBar", searchBar)
 	found := false
-	if name == "" {
+	if artistBtn == "" && searchBar == "" {
 		rand.Seed(time.Now().UnixNano())
 		min := 2
 		max := 53
 		tmp := rand.Intn(max-min+1) + min
-		name = artists[tmp-1].Name
+		artistBtn = artists[tmp-1].Name
 	}
-	for _, v := range artists {
-		if v.Name == name {
-			parseArtist(w, &v)
-			found = true
+	if searchBar == "" && artistBtn != "" {
+		for _, v := range artists {
+			if v.Name == artistBtn {
+				parseArtist(w, &v)
+				found = true
+			}
+		}
+		if !found {
+			errorHandler(w, http.StatusBadRequest)
+		}
+	} else {
+		for i, v := range searchBar {
+			if v == '|' {
+				fmt.Println(searchBar[:i-1])
+			}
 		}
 	}
-	if !found {
-		errorHandler(w, http.StatusBadRequest)
-	}
-
 }
 
 func parseIndex(w http.ResponseWriter) {
-	b, err := getAPI(all.Artists)
+	a, err := getAPI(all.Artists)
 	if err != nil {
+		fmt.Println("2")
 		errorHandler(w, http.StatusInternalServerError)
 	} else {
-		json.Unmarshal(b, &artists)
+		json.Unmarshal(a, &artists)
 
-		t, errParse := template.ParseFiles("assets/templates/index.html")
-		if errParse != nil {
+		b, err := getAPI(all.Relation)
+		if err != nil {
+			fmt.Println("3")
 			errorHandler(w, http.StatusInternalServerError)
 		} else {
-			t.Execute(w, &artists)
+
+			b = b[9 : len(b)-2]
+			json.Unmarshal(b, &rel)
+
+			for i := range artists {
+				artists[i].RelationsData = rel[i]
+			}
+
+			t, errParse := template.ParseFiles("assets/templates/index.html")
+			if errParse != nil {
+				errorHandler(w, http.StatusInternalServerError)
+			} else {
+				t.Execute(w, &artists)
+			}
 		}
 	}
 }
 
 func parseArtist(w http.ResponseWriter, v *ArtistsJSON) {
-	a, err := getAPI(v.Relations)
-	if err != nil {
+	// a, err := getAPI(all.Relation)
+	// if err != nil {
+	// 	fmt.Println("5")
+	// 	errorHandler(w, http.StatusInternalServerError)
+	// } else {
+	// var rel RelationJSON
+	// json.Unmarshal(a, &rel)
+
+	t, errParse := template.ParseFiles("assets/templates/artist.html")
+	if errParse != nil {
+		fmt.Println("6")
 		errorHandler(w, http.StatusInternalServerError)
 	} else {
-		var rel RelationJSON
-		json.Unmarshal(a, &rel)
-		v.RelationsData = rel
-		t, errParse := template.ParseFiles("assets/templates/artist.html")
-		if errParse != nil {
-			errorHandler(w, http.StatusInternalServerError)
-		} else {
-			t.Execute(w, v)
-		}
+		t.Execute(w, v)
 	}
+	// }
 }
 
 func badRequest(w http.ResponseWriter) {

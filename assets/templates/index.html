@@ -16,32 +16,28 @@
     <section class="main">
         <article class="card-table">
             
-            <form class="form" name="submitForm" action="/artist" method="POST">
-                <input list="search-bar" id="search-input" name="artist">
+            <form class="form" action="/artist" method="POST">
+                <input list="search-bar" id="search-input" name="search-bar">
                 <datalist id="search-bar">
                     {{range .}}
-                    <option value="{{.Name}}">
-                    {{range .Members}}
-                    <option value="{{.}}">
-                    {{end}}
-                    <option value="{{.CreationDate}}">
-                    <option value="{{.FirstAlbum}}">
-                    <option value="{{.RelationsData.DatesLocation}}">
+                    <option value="{{.Name}} | name">
+                        {{range .Members}}
+                    <option value="{{.}} | member">
+                        {{end}}
+                    <option value="{{.CreationDate}} | creation date">
+                    <option value="{{.FirstAlbum}} | first album">
+                        {{range $city, $date := .RelationsData.DatesLocations}}
+                    <option value="{{$city}} | city">
+                            {{range $date}}
+                    <option value="{{.}} | concert date">
+                            {{end}}
+                        {{end}}
                     {{end}}
                 </datalist>
-                <article class="search">
-                    <!-- <select class="artists-list" name="artist">
-                        <option disabled selected value>select artist</option>
-                        {{range .}}
-                        <option value="{{.Name}}">{{.Name}}</option>
-                        {{end}}
-                    </select> -->
-                    <input class="btn" type="submit" value="Go!">
-
-                </article>
+                <input class="btn" type="submit" value="Go!">
                 {{range .}}
 
-                <button class="card" name="artist" type="submit" value="{{.Name}}">
+                <button class="card" name="artist-btn" type="submit" value="{{.Name}}">
                     <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
                     <h3 class="btn-artist">{{.Name}}</h3>
                 </button>
