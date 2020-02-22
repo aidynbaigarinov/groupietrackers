@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Search results</title>
+    <link rel="stylesheet" href="/assets/css/reset.css">
+    <link rel="stylesheet" href="/assets/css/search.css">
+</head>
+<body>
+    <header>
+        <a href="http://localhost:8080">Return</a>
+    </header>
+
+    <h1>Your Search Results</h1>
+    <form class="card-btn" action="/artist" method="post">
+        {{range .}}
+        <button class="card" name="artist-btn" type="submit" value="{{.Name}}">
+            <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
+            <h3 class="btn-artist">{{.Name}}</h3>
+        </button>
+
+        {{end}}
+    </form>
+
+    <footer class="footer">
+        <p class="github-link">Made by <a href="https://github.com/aidynbaigarinov">Aidyn</a></p>
+        <article class="quote">
+            <p class="quote-p">"One good thing about music, when it hits you, you feel no pain."</p>
+            <h3>Bob Marley</h3>
+        </article>
+    </footer>
+</body>
+</html>

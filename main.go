@@ -7,6 +7,8 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strconv"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -75,8 +77,6 @@ func rootHandle(w http.ResponseWriter, r *http.Request) {
 func artistHandle(w http.ResponseWriter, r *http.Request) {
 	artistBtn := r.FormValue("artist-btn")
 	searchBar := r.FormValue("search-bar")
-	fmt.Println("name", artistBtn)
-	fmt.Println("searchBar", searchBar)
 	found := false
 	if artistBtn == "" && searchBar == "" {
 		rand.Seed(time.Now().UnixNano())
@@ -95,14 +95,72 @@ func artistHandle(w http.ResponseWriter, r *http.Request) {
 		if !found {
 			errorHandler(w, http.StatusBadRequest)
 		}
-	} else {
-		for i, v := range searchBar {
-			if v == '|' {
-				fmt.Println(searchBar[:i-1])
+	}
+}
+
+func searchHandle(w http.ResponseWriter, r *http.Request) {
+	var searchResult []ArtistsJSON
+	input := r.FormValue("search-bar")
+	for _, v := range artists {
+
+		if strings.ToLower(v.Name) == strings.ToLower(input) {
+			searchResult = append(searchResult, v)
+		} else {
+			for _, i := range v.Members {
+				if strings.ToLower(i) == strings.ToLower(input) {
+					searchResult = append(searchResult, v)
+				}
+			}
+		}
+
+		if strings.ToLower(strconv.Itoa(v.CreationDate)) == strings.ToLower(input) {
+			searchResult = append(searchResult, v)
+		}
+
+		if strings.ToLower(v.FirstAlbum) == strings.ToLower(input) {
+			searchResult = append(searchResult, v)
+		}
+
+		for key, value := range v.RelationsData.DatesLocations {
+			if key == input {
+				searchResult = append(searchResult, v)
+			}
+			for _, i := range value {
+				if i == input {
+					searchResult = append(searchResult, v)
+				}
 			}
 		}
 	}
+	if len(searchResult) == 0 {
+		errorHandler(w, http.StatusBadRequest)
+	} else {
+		parseSearch(w, &searchResult)
+	}
+
 }
+
+// func search(str, input string) string {
+// 	fmt.Println(str)
+// 	fmt.Println(input)
+// 	lenInput := len(input)
+// 	if len(input) > len(str) {
+// 		return input
+// 	}
+// 	if len(input) == 0 {
+// 		return input
+// 	}
+// 	for i, l := 0, len(str); i < l; i++ {
+// 		if input[0] == str[i] && i > i+lenInput {
+// 			fmt.Println(string(str[i]), i, l-lenInput)
+// 			fmt.Println(str[i : i+len(input[1:])])
+// 			if input[1:] == str[i:i+len(input[1:])] {
+// 				return ""
+// 			}
+// 		}
+// 	}
+// 	return input
+// }
 
 func parseIndex(w http.ResponseWriter) {
 	a, err := getAPI(all.Artists)
@@ -136,14 +194,6 @@ func parseIndex(w http.ResponseWriter) {
 }
 
 func parseArtist(w http.ResponseWriter, v *ArtistsJSON) {
-	// a, err := getAPI(all.Relation)
-	// if err != nil {
-	// 	fmt.Println("5")
-	// 	errorHandler(w, http.StatusInternalServerError)
-	// } else {
-	// var rel RelationJSON
-	// json.Unmarshal(a, &rel)
-
 	t, errParse := template.ParseFiles("assets/templates/artist.html")
 	if errParse != nil {
 		fmt.Println("6")
@@ -151,7 +201,16 @@ func parseArtist(w http.ResponseWriter, v *ArtistsJSON) {
 	} else {
 		t.Execute(w, v)
 	}
-	// }
+}
+
+func parseSearch(w http.ResponseWriter, v *[]ArtistsJSON) {
+	t, errParse := template.ParseFiles("assets/templates/search.html")
+	if errParse != nil {
+		fmt.Println(errParse)
+		errorHandler(w, http.StatusInternalServerError)
+	} else {
+		t.Execute(w, v)
+	}
 }
 
 func badRequest(w http.ResponseWriter) {
@@ -179,19 +238,6 @@ func internalServerError(w http.ResponseWriter) {
 	} else {
 		t.Execute(w, nil)
 	}
-}
-
-func checkUrl(url string) bool {
-	for i, n := 0, len(url); i < n; i++ {
-		if i != len(url)-1 && url[i] == '%' {
-			if url[i+1] == '%' {
-				return false
-			} else if url[i] == '{' {
-				return false
-			}
-		}
-	}
-	return true
 }
 
 func errorHandler(w http.ResponseWriter, status int) {
@@ -224,5 +270,6 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", rootHandle)
 	http.HandleFunc("/artist", artistHandle)
+	http.HandleFunc("/search", searchHandle)
 	http.ListenAndServe(":8080", nil)
 }

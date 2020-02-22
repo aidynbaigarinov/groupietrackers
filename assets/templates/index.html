@@ -16,27 +16,28 @@
     <section class="main">
         <article class="card-table">
             
-            <form class="form" action="/artist" method="POST">
-                <input list="search-bar" id="search-input" name="search-bar">
+            <form class="search-bar" action="/search" method="POST">
+                <input class="input-bar" list="search-bar" id="search-input" name="search-bar">
                 <datalist id="search-bar">
                     {{range .}}
-                    <option value="{{.Name}} | name">
+                    <option value="{{.Name}}">
                         {{range .Members}}
-                    <option value="{{.}} | member">
+                    <option value="{{.}}">
                         {{end}}
-                    <option value="{{.CreationDate}} | creation date">
-                    <option value="{{.FirstAlbum}} | first album">
+                    <option value="{{.CreationDate}}">
+                    <option value="{{.FirstAlbum}}">
                         {{range $city, $date := .RelationsData.DatesLocations}}
-                    <option value="{{$city}} | city">
+                    <option value="{{$city}}">
                             {{range $date}}
-                    <option value="{{.}} | concert date">
+                    <option value="{{.}}">
                             {{end}}
                         {{end}}
                     {{end}}
                 </datalist>
                 <input class="btn" type="submit" value="Go!">
                 {{range .}}
-
+            </form>
+            <form class="card-btn" action="/artist" method="post">
                 <button class="card" name="artist-btn" type="submit" value="{{.Name}}">
                     <img src="{{.Image}}" width="200" height="200" alt="{{.Name}}">
                     <h3 class="btn-artist">{{.Name}}</h3>
