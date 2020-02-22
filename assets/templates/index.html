@@ -17,7 +17,7 @@
         <article class="card-table">
             
             <form class="search-bar" action="/search" method="POST">
-                <input class="input-bar" list="search-bar" id="search-input" name="search-bar">
+                <input class="input-bar" list="search-bar" id="search-input" name="search-bar" placeholder="type something..." autocomplete="off">
                 <datalist id="search-bar">
                     {{range .}}
                     <option value="{{.Name}}">
@@ -34,7 +34,7 @@
                         {{end}}
                     {{end}}
                 </datalist>
-                <input class="btn" type="submit" value="Go!">
+                <input class="btn" type="submit" value="Search">
                 {{range .}}
             </form>
             <form class="card-btn" action="/artist" method="post">

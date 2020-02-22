@@ -101,6 +101,7 @@ h1:hover::after {
     display: block;
     width: 100%;
     text-align: center;
+    margin: 50px 0 50px 0;
 }
 
 .input-bar {
@@ -115,6 +116,7 @@ h1:hover::after {
 
 
 .input-bar:hover {
+    box-shadow: 0px 20px 14px 0px rgba(0,0,0);
     background-color: rgba(0, 0, 0);
     color: #F2B705;
 }
